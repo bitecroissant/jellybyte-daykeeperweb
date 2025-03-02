@@ -1,19 +1,20 @@
-import { useEffect } from 'react'
+import { time } from '../lib/time'
 import s from './EventDatePageHeader.module.scss'
 
+type Props = {
+  eventDate?: EventDatesTypes
+}
 
-export const EventDatePageHeader = () => {
-  useEffect(() => {
-
-  })
+export const EventDatePageHeader = (props: Props) => {
+  const { eventDate } = props
 
   return (
     <div className={s.header}>
       <div className={s.remainDaysWrapper}>
-        <p className={s.dates}>2025-03-02</p>
-        <p>距离莫后演唱会</p>
+        <p className={s.dates}>{ time().format() }</p>
+        <p>距离 {eventDate?.eventName}</p>
         <p className={s.remainDays}>还有</p>
-        <span className={s.days}>13</span> 天
+        <span className={s.days}>{ eventDate && time().calcNaturalDaysBetween(time(eventDate.happenAt)) }</span> 天
       </div>
     </div>
   )

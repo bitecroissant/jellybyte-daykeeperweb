@@ -1,36 +1,34 @@
-import { useEffect } from 'react'
+import { time } from '../lib/time'
 import s from './EventDatePageItem.module.scss'
 
 interface Props {
   imgSrc: string
   borderColor: string
+  eventDate?: EventDatesTypes
 }
 
 export const EventDatePageItem = (props: Props) => {
-  const {imgSrc,borderColor} = props
-  
-  useEffect(() => {
+  const { imgSrc, borderColor, eventDate } = props
 
-  })
   return (
     <>
       <div className={s.itemWrapper}>
         <div className={s.avatar}>
-          <img src={imgSrc} height={80}/>
+          <img src={imgSrc} height={80} />
         </div>
-        <div className={s.contentWrapper} style={{borderColor}}>
+        <div className={s.contentWrapper} style={{ borderColor }}>
           <div className="nameAndDays">
-<div className="eventName">
-            拖地
+            <div className="eventName">
+              {eventDate?.eventName}
+            </div>
+            <div className={s.daysBetween}>
+              已经 <span className={s.days}>{ eventDate && time().calcNaturalDaysBetween(time(eventDate.happenAt)) }</span> 天
+            </div>
           </div>
-<div className={s.daysBetween}>
-            已经 <span className={s.days}>{3}</span> 天
-          </div>
-          </div>
-          
-          
+
+
           <div className={s.happenedAt}>
-            2025-03-02
+            {time(eventDate?.happenAt).format()}
           </div>
         </div>
       </div>

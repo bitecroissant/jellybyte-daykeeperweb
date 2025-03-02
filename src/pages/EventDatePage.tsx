@@ -10,10 +10,21 @@ import lifaImg from '../assets/lifa.png'
 import hriddjImg from '../assets/hriddj.png'
 import { AxiosError } from 'axios'
 
+const keys = ['莫后演唱会', '拖地', '陆陆理发', '瓜瓜理发', '陆陆换床单', '瓜瓜换床单',]
+const imgSrcList = ['', todiImg, lifaImg, lifaImg, hriddjImg, hriddjImg]
+const borderColorList = ['', '#1CC5AD', '#ECC26C', '#2084F8', '#ECC26C', '#2084F8']
+
+type keyTypes = typeof keys
+
+type EventDatesSortedMapper = {
+  [key in keyTypes[number]]?: EventDatesTypes
+}
+
+
 export const EventDatePage = () => {
   const nav = useNavigate()
   const { get } = useAjax()
-  const [eventDates, setEventDates] = useState<EventDatesTypes[]>([])
+  const [eventDatesNameMapper, setEventDatesNameMapper] = useState<EventDatesSortedMapper>({})
   const loadEventDates = async () => {
     try {
       const result = (await get<EventDatesTypes[]>('/event_dates')).data
@@ -24,8 +35,17 @@ export const EventDatePage = () => {
           const timeA = time(a.happenAt);
           return timeA.isAfter(b.happenAt) ? -1 : 1;
         });
-        setEventDates(filtered)
-        console.log(JSON.stringify(filtered));
+
+        const mapper: EventDatesSortedMapper = {}
+        keys.forEach((k) => {
+          const items = filtered.filter(x => x.eventName === k)
+          if (items.length === 1) {
+            mapper[k] = items[0]
+          } else {
+            console.error(k, '###',JSON.stringify(items))
+          }
+        })
+        setEventDatesNameMapper(mapper)
       }
     } catch (err) {
       if ((err as AxiosError).response?.status === 403) {
@@ -38,9 +58,6 @@ export const EventDatePage = () => {
     loadEventDates()
   }, [])
 
-  const items = [0, 1, 2, 3, 4, 5, 6]
-  const imgSrcList = [todiImg, lifaImg, hriddjImg]
-  const borderColorList = ['#1CC5AD', '#ECC26C', '#2084F8']
 
   const onCapture = async (ev: MouseEvent) => {
     const el = (ev.target as HTMLButtonElement)
@@ -60,12 +77,14 @@ export const EventDatePage = () => {
   return (
     <>
       <div>
-        <EventDatePageHeader />
+        <EventDatePageHeader eventDate={eventDatesNameMapper[keys[0]]} />
         <div className="listWrapper">
           {
-            items.map(i => {
+            keys.map((k, i) => {
+              if (i === 0) { return }
               return <EventDatePageItem key={i}
-                imgSrc={imgSrcList[i % 3]} borderColor={borderColorList[i % 3]} />
+                imgSrc={imgSrcList[i]} borderColor={borderColorList[i]} 
+                eventDate={eventDatesNameMapper[k]} />
             })
           }
         </div>
