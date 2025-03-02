@@ -1,0 +1,44 @@
+.itemWrapper {
+  background: white;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-top: 12px;
+  display: flex;
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+  }
+
+  .contentWrapper {
+    flex: 1;
+    border-left: 12px solid;
+    padding: 4px 24px 4px 8px;
+    font-size: 24px;
+    line-height: 1.5;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+
+    .daysBetween {
+      font-size: 20px;
+      font-weight: normal;
+      color: #787879;
+
+      .days {
+        line-height: 30px;
+        font-size: 36px;
+        color: #F81E03;
+        font-weight: bold;
+      }
+    }
+
+
+    .happenedAt {
+      font-size: 16px;
+      font-weight: normal;
+      color: #B0B0B0;
+    }
+  }
+}

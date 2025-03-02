@@ -1,13 +1,18 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent } from 'react'
 import html2canvas from 'html2canvas'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { EventDatePageItem } from './pages/EventDatePageItem'
+import { EventDatePageHeader } from './pages/EventDatePageHeader'
+import s from './App.module.scss'
+import todiImg from './assets/todi.png'
+import lifaImg from './assets/lifa.png'
+import hriddjImg from './assets/hriddj.png'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const items = [0, 1, 2, 3, 4, 5, 6]
+  const imgSrcList = [todiImg, lifaImg, hriddjImg]
+  const borderColorList = ['#1CC5AD', '#ECC26C', '#2084F8']
 
-  const onClickScreenShot = async (ev: MouseEvent) => {
+  const onCapture = async (ev: MouseEvent) => {
     const el = (ev.target as HTMLButtonElement)
     console.log('disappare')
     el.style.visibility = "hidden"
@@ -16,38 +21,27 @@ function App() {
     link.download = 'screenshot.png';
     link.href = screenshot.toDataURL('image/png');
     link.click();
-
     setTimeout(() => {
       console.log('appare')
       el.style.visibility = "visible"
-    }, 1500)
+    }, 300)
   }
 
   return (
-    <div id="wrapper" >
-
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <>
+      <div id="pageWrapper" className={s.pageWrapper}>
+        <EventDatePageHeader />
+        <div className="listWrapper">
+          {
+            items.map(i => {
+              return <EventDatePageItem
+                imgSrc={imgSrcList[i % 3]} borderColor={borderColorList[i % 3]} />
+            })
+          }
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <button className="btn" onClick={onClickScreenShot}>截图</button>
-    </div>
+      <button onClick={onCapture} className="captureBtn">截图</button>
+    </>
   )
 }
 
