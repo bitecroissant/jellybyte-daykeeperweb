@@ -34,7 +34,7 @@ export class Time {
 
   // compare
   isBefore(d: string | number | Date) {
-    return this.#date < new Date()
+    return this.#date < new Date(d)
   }
 
   isAfter(d: string | number | Date) {
